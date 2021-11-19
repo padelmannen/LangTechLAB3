@@ -82,7 +82,7 @@ class ViterbiBigramDecoder(object):
 
         # Finally return the result
 
-        # REPLACE THE LINE BELOW WITH YOUR CODE
+        #  REPLACE THE LINE BELOW WITH YOUR CODE
 
         return ''
 
