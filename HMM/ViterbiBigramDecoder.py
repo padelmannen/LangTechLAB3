@@ -71,6 +71,10 @@ class ViterbiBigramDecoder(object):
         self.backptr[0,:] = Key.START_END
         self.v[0,:] = self.a[Key.START_END,:] + self.b[index[0],:]
 
+        print(self.a)
+        #print(self.b)
+       # print(self.v)
+
 
         # Induction step
 

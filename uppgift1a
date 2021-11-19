@@ -12,6 +12,5 @@ Observartionerna är den tidigare knapptryckningen, och ges från den första bo
 modellen där vi har sannolikhheterna för en viss knapptryckning givet en tidigare.
 
 Observationssannoliklheten:
-Observationssannolikheten är sannolikheten att vi klickar på en bokstav oberoende av viken vi klickat på tidigare.
-r g¨omda tillst˚anden, observationerna, ¨overg˚angssannolikheterna
-(state transition probabilities), och observationssannolikheterna?
+Observationssannolikheten är sannolikheten att vi klickar på en bokstav oberoende av vilken vi klickat på tidigare.
+I denna uppgift ges den som sannolikheten att vi har klickat på rätt bokstav, kontra att vi klickat på fel bokstav.
