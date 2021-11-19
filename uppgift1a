@@ -1,0 +1,17 @@
+I denna uppgift saknar vi de två klasserna som normalt sett används i hidden markov models,
+och kollar vi enbart på sannolikheten att klicka på en bokstav följt av en annan. Detta gör att:
+
+gömda tillstånd:
+De gömda tillstånden är de tillstånden som vi kan gå till, dvs den kommande knapptryckningen givet en tidigare.
+
+observationerna:
+Observartionerna är den tidigare knapptryckningen, och ges från den första bokstaven i bigrammodellen.
+
+övergångssannolikheten:
+Övergångssannolikheten är den sannolikhet att vi går till en viss bokstav, givet en annan. Detta ges direkt i bigram
+modellen där vi har sannolikhheterna för en viss knapptryckning givet en tidigare.
+
+Observationssannoliklheten:
+Observationssannolikheten är sannolikheten att vi klickar på en bokstav oberoende av viken vi klickat på tidigare.
+r g¨omda tillst˚anden, observationerna, ¨overg˚angssannolikheterna
+(state transition probabilities), och observationssannolikheterna?
