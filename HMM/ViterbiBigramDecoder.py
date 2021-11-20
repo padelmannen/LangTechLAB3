@@ -106,7 +106,7 @@ class ViterbiBigramDecoder(object):
         #                 self.backptr[t][index] = i  # Pointing back at the best path
         #
         #
-        # result = ""
+        result = ""
         # next = self.backptr[len(self.v) - 1][26]    # Always start with space
         # for i in range(len(self.v) - 2, 0, -1):
         #     next = self.backptr[i][next]
