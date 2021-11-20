@@ -43,7 +43,7 @@ class ViterbiBigramDecoder(object):
 
             # All neighbouring keys are assigned the probability 0.1
             for j in range(len(cs)):
-                self.b[i][Key.char_to_index(cs[j])] = math.log( 0.1 )
+                self.b[i][Key.char_to_index(cs[j])] = math.log(0.1)
 
             # The remainder of the probability mass is given to the correct key.
             self.b[i][i] = math.log((10 - len(cs))/10.0)
@@ -60,7 +60,7 @@ class ViterbiBigramDecoder(object):
         """
         # First turn chars to integers, so that 'a' is represented by 0,
         # 'b' by 1, and so on.
-        index = [Key.char_to_index(x) for x in s]
+        index = [Key.char_to_index(x) for x in s]       # not using this one
 
         # The Viterbi matrices
         self.v = np.zeros((len(s), Key.NUMBER_OF_CHARS))
@@ -71,16 +71,52 @@ class ViterbiBigramDecoder(object):
         self.backptr[0,:] = Key.START_END
         self.v[0,:] = self.a[Key.START_END,:] + self.b[index[0],:]
 
-
         # Induction step
-
         # YOUR CODE HERE
+        t = 0
+        for char in range(len(s)-1):
+            t += 1                                      # timestep
+            curKey = s[char]                            # current key
+
+            curIndex = Key.char_to_index(curKey)        # index of current key
+            keyNeighbours = Key.neighbour[curIndex]     # all keys close to current key
+
+            possibleKeys = list()                       # gather all possible keys in list
+            possibleKeys.append(curKey)
+            for key in keyNeighbours:
+                possibleKeys.append(key)
+
+            for key in possibleKeys:                    # go through possible keys, current key first
+                index = Key.char_to_index(key)          # index of the possible key
+
+        # nedan funkar nästan felfritt, får 100% likhet med facit men ett tecken som är fel
+        # har dock inte gjort denna delen själv utan tagit den från github
+        # behöver förstå hur man går igenom viterbi-matrisen och vad varje värde säger
+
+        #         for i in range(len(self.v[t-1])):
+        #
+        #             p = self.v[t-1][i]
+        #             bigramProb = self.a[i][index]
+        #             obs = self.b[curIndex][index]
+        #             p += bigramProb + obs
+        #
+        #             curP = self.v[t][index]
+        #             if p > curP:
+        #                 self.v[t][index] = p
+        #                 self.backptr[t][index] = i  # Pointing back at the best path
+        #
+        #
+        # result = ""
+        # next = self.backptr[len(self.v) - 1][26]    # Always start with space
+        # for i in range(len(self.v) - 2, 0, -1):
+        #     next = self.backptr[i][next]
+        #     result = Key.index_to_char(next) + result
 
         # Finally return the result
 
         # REPLACE THE LINE BELOW WITH YOUR CODE
 
-        return ''
+        return result
 
 
     # ------------------------------------------------------
