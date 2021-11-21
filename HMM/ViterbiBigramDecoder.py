@@ -12,11 +12,13 @@ This file is part of the computer assignments for the course DD1418/DD2418 Langu
 Created 2017 by Johan Boye and Patrik Jonell.
 """
 
+
 class ViterbiBigramDecoder(object):
     """
     This class implements Viterbi decoding using bigram probabilities in order
     to correct keystroke errors.
     """
+
     def init_a(self, filename):
         """
         Reads the bigram probabilities (the 'A' matrix) from a file.
@@ -26,9 +28,7 @@ class ViterbiBigramDecoder(object):
                 i, j, d = [func(x) for func, x in zip([int, int, float], line.strip().split(' '))]
                 self.a[i][j] = d
 
-
     # ------------------------------------------------------
-
 
     def init_b(self):
         """
@@ -43,15 +43,13 @@ class ViterbiBigramDecoder(object):
 
             # All neighbouring keys are assigned the probability 0.1
             for j in range(len(cs)):
-                self.b[i][Key.char_to_index(cs[j])] = math.log( 0.1 )
+                self.b[i][Key.char_to_index(cs[j])] = math.log(0.1)
 
             # The remainder of the probability mass is given to the correct key.
-            self.b[i][i] = math.log((10 - len(cs))/10.0)
-
+            self.b[i][i] = math.log((10 - len(cs)) / 10.0)
+            #print(self.b[i][i])
 
     # ------------------------------------------------------
-
-
 
     def viterbi(self, s):
         """
@@ -61,20 +59,41 @@ class ViterbiBigramDecoder(object):
         # First turn chars to integers, so that 'a' is represented by 0,
         # 'b' by 1, and so on.
         index = [Key.char_to_index(x) for x in s]
-
+        # print (index)
         # The Viterbi matrices
         self.v = np.zeros((len(s), Key.NUMBER_OF_CHARS))
-        self.v[:,:] = -float("inf")
+        self.v[:, :] = -float("inf")
         self.backptr = np.zeros((len(s) + 1, Key.NUMBER_OF_CHARS), dtype='int')
 
         # Initialization
-        self.backptr[0,:] = Key.START_END
-        self.v[0,:] = self.a[Key.START_END,:] + self.b[index[0],:]
+        self.backptr[0, :] = Key.START_END
+        self.v[0, :] = self.a[Key.START_END, :] + self.b[index[0], :]
 
-        print(self.a)
-        #print(self.b)
-       # print(self.v)
+        for t in range(1, len(s) - 1):
+            for k in range(Key.NUMBER_OF_CHARS):
+                maxP = 0
+                currI = 0
+                for i in range(Key.NUMBER_OF_CHARS):
+                    newMaxP = self.v[t - 1, i] * self.b[k, i] * self.a[index[t], k]
+                    if newMaxP > maxP:
+                        maxP = newMaxP
+                        currI = i
+                self.v[t,k] = maxP
+                self.backptr[t,k] = currI
 
+        outputlist = []
+        startCoord = '':
+        for k in
+        for char in range(len(s)):
+            curCar =
+
+
+
+
+
+        # print(self.a)
+        # print(self.b)
+        # print(self.v)
 
         # Induction step
 
@@ -86,10 +105,7 @@ class ViterbiBigramDecoder(object):
 
         return ''
 
-
     # ------------------------------------------------------
-
-
 
     def __init__(self, filename=None):
         """
@@ -110,18 +126,15 @@ class ViterbiBigramDecoder(object):
         if filename: self.init_a(filename)
         self.init_b()
 
-
-
     # ------------------------------------------------------
 
 
 def main():
-
     parser = argparse.ArgumentParser(description='ViterbiBigramDecoder')
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--file', '-f', type=str, help='decode the contents of a file')
     group.add_argument('--string', '-s', type=str, help='decode a string')
-    parser.add_argument('--probs', '-p', type=str,  required=True, help='bigram probabilities file')
+    parser.add_argument('--probs', '-p', type=str, required=True, help='bigram probabilities file')
     parser.add_argument('--check', action='store_true', help='check if your answer is correct')
 
     arguments = parser.parse_args()
@@ -140,13 +153,13 @@ def main():
 
     if arguments.check:
         payload = json.dumps({
-            'a': d.a.tolist(), 
+            'a': d.a.tolist(),
             'string': s1,
-            'result': result 
+            'result': result
         })
         response = requests.post(
             'https://language-engineering.herokuapp.com/lab3_bigram',
-            data=payload, 
+            data=payload,
             headers={'content-type': 'application/json'}
         )
         response_data = response.json()
