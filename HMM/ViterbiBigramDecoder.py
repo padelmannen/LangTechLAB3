@@ -71,22 +71,29 @@ class ViterbiBigramDecoder(object):
 
         for t in range(1, len(s) - 1):
             for k in range(Key.NUMBER_OF_CHARS):
-                maxP = 0
+                maxP = -1000000
                 currI = 0
                 for i in range(Key.NUMBER_OF_CHARS):
-                    newMaxP = self.v[t - 1, i] * self.b[k, i] * self.a[index[t], k]
+                    newMaxP = self.v[t - 1, i] + self.b[k, i] + self.a[index[t], k]
+                    print(newMaxP)
+                   # print(index[t])
                     if newMaxP > maxP:
+                        #print(newMaxP)
+                       # print(maxP)
+
                         maxP = newMaxP
                         currI = i
                 self.v[t,k] = maxP
                 self.backptr[t,k] = currI
 
-        outputlist = []
-        startCoord = '':
-        for k in
-        for char in range(len(s)):
-            curCar =
+        print(self.backptr)
+        result = ''
+        next = self.backptr[len(self.v) - 1][26]  # Always start with space
+        for i in range(len(self.v) - 2, 0, -1):
+            next = self.backptr[i][next]
+            result = Key.index_to_char(next) + result
 
+        return result
 
 
 
@@ -103,7 +110,7 @@ class ViterbiBigramDecoder(object):
 
         #  REPLACE THE LINE BELOW WITH YOUR CODE
 
-        return ''
+
 
     # ------------------------------------------------------
 
