@@ -59,7 +59,7 @@ class ViterbiBigramDecoder(object):
         # First turn chars to integers, so that 'a' is represented by 0,
         # 'b' by 1, and so on.
         index = [Key.char_to_index(x) for x in s]
-        # print (index)
+
         # The Viterbi matrices
         self.v = np.zeros((len(s), Key.NUMBER_OF_CHARS))
         self.v[:, :] = -float("inf")
@@ -69,24 +69,17 @@ class ViterbiBigramDecoder(object):
         self.backptr[0, :] = Key.START_END
         self.v[0, :] = self.a[Key.START_END, :] + self.b[index[0], :]
 
-        for t in range(1, len(s) - 1):
+        for t in range(1, len(s)):
             for k in range(Key.NUMBER_OF_CHARS):
-                maxP = -1000000
+                maxP = -1000000000
                 currI = 0
                 for i in range(Key.NUMBER_OF_CHARS):
-                    newMaxP = self.v[t - 1, i] + self.b[k, i] + self.a[index[t], k]
-                    print(newMaxP)
-                   # print(index[t])
+                    newMaxP = self.v[t - 1, i] + self.a[i, k] + self.b[k, index[t]]
                     if newMaxP > maxP:
-                        #print(newMaxP)
-                       # print(maxP)
-
                         maxP = newMaxP
                         currI = i
-                self.v[t,k] = maxP
-                self.backptr[t,k] = currI
-
-        print(self.backptr)
+                self.v[t, k] = maxP
+                self.backptr[t, k] = currI
         result = ''
         next = self.backptr[len(self.v) - 1][26]  # Always start with space
         for i in range(len(self.v) - 2, 0, -1):
@@ -95,24 +88,6 @@ class ViterbiBigramDecoder(object):
 
         return result
 
-
-
-
-        # print(self.a)
-        # print(self.b)
-        # print(self.v)
-
-        # Induction step
-
-        # YOUR CODE HERE
-
-        # Finally return the result
-
-        #  REPLACE THE LINE BELOW WITH YOUR CODE
-
-
-
-    # ------------------------------------------------------
 
     def __init__(self, filename=None):
         """
