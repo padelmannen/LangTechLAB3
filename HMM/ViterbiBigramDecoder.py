@@ -71,15 +71,15 @@ class ViterbiBigramDecoder(object):
 
         for t in range(1, len(s)):
             for k in range(Key.NUMBER_OF_CHARS):
-                maxP = -1000000000
+                maxP = -float("inf")
                 currI = 0
                 for i in range(Key.NUMBER_OF_CHARS):
-                    newMaxP = self.v[t - 1, i] + self.a[i, k] + self.b[k, index[t]]
-                    if newMaxP > maxP:
-                        maxP = newMaxP
+                    newP = self.v[t - 1][i] + self.a[i][k] + self.b[index[t]][k]
+                    if newP > maxP:
+                        maxP = newP
                         currI = i
-                self.v[t, k] = maxP
-                self.backptr[t, k] = currI
+                self.v[t][k] = maxP
+                self.backptr[t][k] = currI
         result = ''
         next = self.backptr[len(self.v) - 1][26]  # Always start with space
         for i in range(len(self.v) - 2, 0, -1):

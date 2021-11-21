@@ -67,23 +67,36 @@ class ViterbiTrigramDecoder(object):
         self.v[:,:,:] = -float("inf")
         self.backptr = np.zeros((len(s), Key.NUMBER_OF_CHARS, Key.NUMBER_OF_CHARS), dtype='int')
 
-        # Initialization
 
-        # YOUR CODE HERE
-
-        # Induction step
-
-        # YOUR CODE HERE
-
-        # Finally return the result
-
-        # REPLACE THE LINE BELOW WITH YOUR CODE
-
-        return ''
+        self.backptr[0,:,:] = Key.START_END
+        self.v[0, Key.START_END, :] = self.a[Key.START_END, Key.START_END, :] + self.b[index[0], :]
 
 
+        for t in range(1, len(s)):
+            for k in range(Key.NUMBER_OF_CHARS):
+                for j in range(Key.NUMBER_OF_CHARS):
+                    maxP = -float("inf")
+                    currI = 0
+                    for i in range(Key.NUMBER_OF_CHARS):
+                        newP = self.v[t - 1][i][j] + self.a[i][j][k] + self.b[index[t]][k]
+                        if newP > maxP:
+                            maxP = newP
+                            currI = i
 
-    # ------------------------------------------------------
+                    self.v[t][j][k] = maxP
+                    self.backptr[t][j][k] = currI
+
+        result = ''
+        cur = self.backptr[len(self.v) - 1][Key.START_END][Key.START_END]
+        next = self.backptr[len(self.v) - 2][cur][Key.START_END]
+
+        for i in range (len(self.v)-3, -1, -1):
+            result = Key.index_to_char(cur) + result
+            leftOfCur = next
+            next = self.backptr[i][next][cur]
+            cur = leftOfCur
+
+        return result
 
 
 
