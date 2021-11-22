@@ -73,7 +73,11 @@ class ViterbiTrigramDecoder(object):
 
 
         for t in range(1, len(s)):
-            for k in range(Key.NUMBER_OF_CHARS):
+            possibleKeys = Key.neighbour[index[t]]
+            listOfKeys = [index[t]]
+            for i in possibleKeys:    #Kollar möjliga knapptryckningar utifrån den observerade knappen
+                listOfKeys.append(Key.char_to_index(i))
+            for k in listOfKeys:
                 for j in range(Key.NUMBER_OF_CHARS):
                     maxP = -float("inf")
                     currI = 0

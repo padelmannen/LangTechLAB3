@@ -70,7 +70,11 @@ class ViterbiBigramDecoder(object):
         self.v[0, :] = self.a[Key.START_END, :] + self.b[index[0], :]
 
         for t in range(1, len(s)):
-            for k in range(Key.NUMBER_OF_CHARS):
+            possibleKeys = Key.neighbour[index[t]]
+            listOfKeys = [index[t]]
+            for i in possibleKeys:     #Kollar möjliga knapptryckningar utifrån den observerade knappen
+                listOfKeys.append(Key.char_to_index(i))
+            for k in listOfKeys:
                 maxP = -float("inf")
                 currI = 0
                 for i in range(Key.NUMBER_OF_CHARS):
@@ -80,14 +84,14 @@ class ViterbiBigramDecoder(object):
                         currI = i
                 self.v[t][k] = maxP
                 self.backptr[t][k] = currI
-        result = ''
-        next = self.backptr[len(self.v) - 1][26]  # Always start with space
-        for i in range(len(self.v) - 2, 0, -1):
-            next = self.backptr[i][next]
-            result = Key.index_to_char(next) + result
 
+        result = ""
+        previousChar = Key.START_END  # index of space
+        for t in range(len(self.backptr) - 3, 0, -1):
+            curChar = self.backptr[t][previousChar]
+            result = Key.index_to_char(curChar) + result
+            previousChar = curChar
         return result
-
 
     def __init__(self, filename=None):
         """
