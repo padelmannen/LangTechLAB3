@@ -1,6 +1,5 @@
 from Key import Key
 import math
-import sys
 import numpy as np
 import codecs
 import argparse
