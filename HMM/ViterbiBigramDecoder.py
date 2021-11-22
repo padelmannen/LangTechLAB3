@@ -71,8 +71,6 @@ class ViterbiBigramDecoder(object):
         self.backptr[0,:] = Key.START_END
         self.v[0,:] = self.a[Key.START_END,:] + self.b[index[0],:]
 
-        # Induction step
-        # YOUR CODE HERE
         t = 0
         for char in range(len(s)-1):
             t += 1                                      # timestep
@@ -89,33 +87,25 @@ class ViterbiBigramDecoder(object):
             for key in possibleKeys:                    # go through possible keys, current key first
                 index = Key.char_to_index(key)          # index of the possible key
 
-        # nedan funkar nästan felfritt, får 100% likhet med facit men ett tecken som är fel
-        # har dock inte gjort denna delen själv utan tagit den från github
-        # behöver förstå hur man går igenom viterbi-matrisen och vad varje värde säger
+                for i in range(len(self.v[t-1])):
+                    previousP = self.v[t-1][i]
 
-        #         for i in range(len(self.v[t-1])):
-        #
-        #             p = self.v[t-1][i]
-        #             bigramProb = self.a[i][index]
-        #             obs = self.b[curIndex][index]
-        #             p += bigramProb + obs
-        #
-        #             curP = self.v[t][index]
-        #             if p > curP:
-        #                 self.v[t][index] = p
-        #                 self.backptr[t][index] = i  # Pointing back at the best path
-        #
-        #
+                    if previousP != float("-inf"):          # check if we could get the possible key after previous key
+                        transitionP = self.a[i][index]      # probability of transition from previous to possible key
+                        observationP = self.b[curIndex][index]  # probability of correct or wrong key
+                        totalP = previousP + transitionP + observationP     # total probability to this point
+
+                        maxP = self.v[t][index]                 # the current best probability
+                        if totalP > maxP:                       # check if new probability is better than maxP
+                            self.v[t][index] = totalP
+                            self.backptr[t][index] = i          # change backpointer to the currently best path
+
         result = ""
-        # next = self.backptr[len(self.v) - 1][26]    # Always start with space
-        # for i in range(len(self.v) - 2, 0, -1):
-        #     next = self.backptr[i][next]
-        #     result = Key.index_to_char(next) + result
-
-        # Finally return the result
-
-        # REPLACE THE LINE BELOW WITH YOUR CODE
-
+        previousChar = 26                                       # index of space
+        for t in range(len(self.backptr)-2, 0, -1):
+            curChar = self.backptr[t][previousChar]
+            result = Key.index_to_char(curChar) + result
+            previousChar = curChar
         return result
 
 
